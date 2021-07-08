@@ -210,20 +210,27 @@ void list(FILE *db_file) {
 int delete(FILE *db_file, char *name) {
   entry *p = load_entries(db_file);
   entry *base = p;
-  entry *prev = NULL;
-  entry *del = NULL ; /* Node to be deleted */
   int deleted = 0;
-  while (p!=NULL) {
-    if (strcmp(p->name, name) == 0) {
-     while(base->next->name!=name){                                 
-       base=base->next;                                                        
- }
-  base->next=base->next->next;
-  deleted++;                                                                 
-    }                                                                             
+  
+if (p==NULL){
+     }
+if(p->next==NULL && strcmp(p->name,name)==0){
+free(p);
+p=NULL;
+ 
+}
+else{ //2 or more elements
+    entry *x=p;
+     while(strcmp(x->next->name,name)!=0){
+       x=x->next;
   }
+     entry *temp=x->next;
+    x->next=x->next->next;
+     free(temp);
+}
+deleted ++;
   write_all_entries(base);
-  free_entries(base);
+  free_entries(base); 
   return deleted;
 }
 
@@ -239,3 +246,5 @@ entry *p = load_entries(db_file);
   }
   return 0;
 }
+
+
